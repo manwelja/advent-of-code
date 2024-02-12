@@ -1,0 +1,39 @@
+const { readLine } = require('fs');
+
+const fs = require('fs');
+const util = require('util');
+
+const path = './input.txt';
+
+function syncReadFile(filename) {
+    let text = fs.readFileSync(filename, "utf-8");
+    let textByLine = text.split("\n");
+    return textByLine;
+}
+
+
+try {
+  if (fs.existsSync(path)) {
+    let fileArray = syncReadFile(path);
+
+    result = fileArray.map(function(value) {
+        let regExMatch = new RegExp("[!@#$%^&*()_+\\-=\\[\\]{};\':\"\\|,<>\\/?][0-9]+[\\.]", 'g');
+        let results = value.match(regExMatch);
+
+        if (!results) {
+            return [];
+        }
+
+        let regExReplace = new RegExp("[^\\d]", 'g');
+        return results.map(val => val.replace(regExReplace, ''));
+    })
+    let filteredResults = result.filter(val => val.length > 0).flat();
+
+
+    console.log("result: ", filteredResults.map(Number).reduce((a, b) => a + b, 0));
+
+}
+} catch(err) {
+  console.error(err);
+}
+//not 39372
